@@ -23,7 +23,7 @@ export class WorkshopPipelineStack extends cdk.Stack {
           'npm run build',
           'npx cdk synth'
         ]
-      }),
+      })
     });
   }
 }
