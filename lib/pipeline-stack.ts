@@ -1,5 +1,4 @@
 import * as cdk from 'aws-cdk-lib';
-import * as codecommit from 'aws-cdk-lib/aws-codecommit';
 import { Construct } from 'constructs';
 import { WorkshopPipelineStage } from './pipeline-stage';
 import { CodeBuildStep, CodePipeline, CodePipelineSource } from 'aws-cdk-lib/pipelines';
@@ -8,14 +7,12 @@ export class WorkshopPipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const repo = new codecommit.Repository(this, 'WorkshopRepo', {
-      repositoryName: 'WorkshopRepo'
-    });
-
     const pipeline = new CodePipeline(this, 'Pipeline', {
       pipelineName: 'WorkshopPipeline',
       synth: new CodeBuildStep('SynthStep', {
-        input: CodePipelineSource.codeCommit(repo, 'main'),
+        input: CodePipelineSource.connection('felipebelinassi/cdk-workshop', 'main', {
+          connectionArn: 'arn:aws:codestar-connections:us-east-1:395035128422:connection/b5f6b528-224c-4346-bc2b-0fd4c274af74'
+        }),
         installCommands: [
           'npm install -g aws-cdk'
         ],
